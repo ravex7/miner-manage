@@ -1,0 +1,21 @@
+<input type="text" ng-model="projectList.search" class="search-query" id="projects_search"
+       placeholder="Search">
+<table>
+  <thead>
+  <tr>
+    <th>Project</th>
+    <th>Description</th>
+    <th><a ui-sref="newState">New</a>
+    </th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr ng-repeat="project in projectList.projects | filter:projectList.search | orderBy:'name'">
+    <td><a ng-href="{{project.site}}" target="_blank">{{project.name}}</a></td>
+    <td>{{project.description}}</td>
+    <td>
+      <a ui-sref="edit({projectId: project.id})"><i class="fa fa-pencil"></i></a>
+    </td>
+  </tr>
+  </tbody>
+</table>

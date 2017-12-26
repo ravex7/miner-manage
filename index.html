@@ -32,94 +32,129 @@
       <div flex="20"></div>
       <div flex="50">
          <md-content class="md-padding">
-       <md-nav-bar
-        md-no-ink-bar="disableInkBar"
-        md-selected-nav-item="currentNavItem"
-        nav-bar-aria-label="navigation links">
-        <md-nav-item md-nav-click="goto('pools')" name="pools">
-          Pools
-        </md-nav-item>
-        <md-nav-item md-nav-click="goto('algos')" name="algos">
-          Algos
-        </md-nav-item>
-        <md-nav-item md-nav-click="goto('miners')" name="miners">
-          Miners
-        </md-nav-item>
-        <md-nav-item md-nav-click="goto('config')" name="config">
-          Config
-        </md-nav-item>
-      </md-nav-bar>
-         <div flex-gt-sm="100" flex ng-show="poolsView">
-          <div ng-show="poolsList">
-            <md-toolbar>
-              <div class="md-toolbar-tools">
-                <md-button aria-label="Pool">
-                  Pools
-                </md-button>
-
-                <span flex></span>
-                <md-button class="md-raised" aria-label="New Pool" ng-click="getPool()">
-                  New Pool
-                </md-button>
-              </div>
-            </md-toolbar>
-
-          <md-content>
-            <md-list flex>
-              <md-list-item class="md-2-line" ng-repeat="item in pools">
-                <div class="md-list-item-text" ng-click="getPool(item.id)">
-                  <h3>{{item.name}}</h3>
-                  <p>{{item.url}}</p>
-                  <md-button class="md-secondary" ng-click="getPool(item.id)">Edit</md-button>
+           <md-nav-bar
+            md-no-ink-bar="disableInkBar"
+            md-selected-nav-item="currentNavItem"
+            nav-bar-aria-label="navigation links">
+            <md-nav-item md-nav-click="goto('pools')" name="pools">
+              Pools
+            </md-nav-item>
+            <md-nav-item md-nav-click="goto('algos')" name="algos">
+              Algos
+            </md-nav-item>
+            <md-nav-item md-nav-click="goto('miners')" name="miners">
+              Miners
+            </md-nav-item>
+            <md-nav-item md-nav-click="goto('config')" name="config">
+              Config
+            </md-nav-item>
+          </md-nav-bar>
+           <div flex-gt-sm="100" flex ng-show="poolsView">
+            <div ng-show="poolsList">
+              <md-toolbar>
+                <div class="md-toolbar-tools">
+                  <md-button aria-label="Pool">
+                    Pools
+                  </md-button>
+                  <span flex></span>
+                  <md-button class="md-raised" aria-label="New Pool" ng-click="getPool()">
+                    New Pool
+                  </md-button>
                 </div>
-              </md-list-item>
-            </md-list>
-          </md-content>
-          </div>
-          <div ng-show="poolDetail">
-            <md-content layout-padding>
-              <div>
-                <form name="poolForm">
-                  <input type="hidden" ng-model="pool.id" />
-                  <div layout-gt-sm="row">
-                    <md-input-container class="md-block" flex-gt-sm>
-                      <label>Pool name</label>
-                      <input ng-model="pool.name">
-                    </md-input-container>
-                  </div>
-
-                  <div layout-gt-sm="row">
-                    <md-input-container class="md-block" flex-gt-sm>
-                      <label>Pool url</label>
-                      <input ng-model="pool.url">
-                    </md-input-container>
-                  </div>
-                  <md-button ng-click="savePool()" class="md-raised md-primary">Save Pool</md-button>
-                  <md-button ng-click="cancelPool()" class="md-raised md-warn">Cancel</md-button>
-                </form>
-              </div>
-            </md-content>
-          </div>
-        </div>
-        <div flex-gt-sm="100" flex ng-show="algosView">
-          <md-toolbar layout="row" class="md-hue-3">
-            <div class="md-toolbar-tools">
-              <span>Algos</span>
+              </md-toolbar>
+              <md-content>
+                <md-list flex>
+                  <md-list-item class="md-2-line" ng-repeat="item in algos">
+                    <div class="md-list-item-text" ng-click="getPool(item.id)">
+                      <h3> Name : {{item.name}}</h3>
+                      <p>URL : {{item.url}}</p>
+                      <p>No -a : {{item.a}}</p>
+                      <md-button class="md-secondary" ng-click="getPool(item.id)">Edit</md-button>
+                    </div>
+                  </md-list-item>
+                </md-list>
+              </md-content>
             </div>
-          </md-toolbar>
+            <div ng-show="poolDetail">
+              <md-content layout-padding>
+                <div>
+                  <form name="poolForm">
+                    <input type="hidden" ng-model="pool.id" />
+                    <div layout-gt-sm="row">
+                      <md-input-container class="md-block" flex-gt-sm>
+                        <label>Pool name</label>
+                        <input ng-model="pool.name">
+                      </md-input-container>
+                    </div>
 
-          <md-content>
-            <md-list flex>
-              <md-list-item class="md-2-line" ng-repeat="item in algos">
-                <div class="md-list-item-text" ng-click="editPool($event)">
-                  <h3>{{item.name}}</h3>
-                  <p>{{item.port}}</p>
-                  <md-button class="md-secondary" ng-click="editPool($event)">Edit</md-button>
+                    <div layout-gt-sm="row">
+                      <md-input-container class="md-block" flex-gt-sm>
+                        <label>Pool url</label>
+                        <input ng-model="pool.url">
+                      </md-input-container>
+                    </div>
+                    <div layout-gt-sm="row">
+                      <md-checkbox ng-model="pool.a" aria-label="No -a" ng-true-value="'Y'" ng-false-value="'N'">
+                        No -a
+                      </md-checkbox>
+                    </div>
+                    <md-button ng-click="savePool()" class="md-raised md-primary">Save Pool</md-button>
+                    <md-button ng-click="cancelPool()" class="md-raised md-warn">Cancel</md-button>
+                  </form>
                 </div>
-              </md-list-item>
-            </md-list>
-          </md-content>
-        </div>
+              </md-content>
+            </div>
+          </div>
+          <div flex-gt-sm="100" flex ng-show="algosView">
+            <div ng-show="algosList">
+              <md-toolbar>
+                <div class="md-toolbar-tools">
+                  <md-button aria-label="algo">
+                    Algos
+                  </md-button>
+                  <span flex></span>
+                  <md-button class="md-raised" aria-label="New Algo" ng-click="getAlgo()">
+                    New Algo
+                  </md-button>
+                </div>
+              </md-toolbar>
+              <md-content>
+                <md-list flex>
+                  <md-list-item class="md-2-line" ng-repeat="item in algos">
+                    <div class="md-list-item-text" ng-click="getAlgo(item.id)">
+                      <h3> Name : {{item.name}}</h3>
+                      <p>URL : {{item.port}}</p>
+                      <md-button class="md-secondary" ng-click="getAlgo(item.id)">Edit</md-button>
+                    </div>
+                  </md-list-item>
+                </md-list>
+              </md-content>
+            </div>
+            <div ng-show="algoDetail">
+              <md-content layout-padding>
+                <div>
+                  <form name="algoForm">
+                    <input type="hidden" ng-model="algo.id" />
+                    <div layout-gt-sm="row">
+                      <md-input-container class="md-block" flex-gt-sm>
+                        <label>algo name</label>
+                        <input ng-model="algo.name">
+                      </md-input-container>
+                    </div>
+
+                    <div layout-gt-sm="row">
+                      <md-input-container class="md-block" flex-gt-sm>
+                        <label>algo port</label>
+                        <input ng-model="algo.url" type="number">
+                      </md-input-container>
+                    </div>
+                    <md-button ng-click="saveAlgo()" class="md-raised md-primary">Save Algo</md-button>
+                    <md-button ng-click="cancelAlgo()" class="md-raised md-warn">Cancel</md-button>
+                  </form>
+                </div>
+              </md-content>
+            </div>
+          </div>
         <div flex-gt-sm="100" flex ng-show="configView">
           config
         </div>

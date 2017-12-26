@@ -1,28 +1,36 @@
 angular.module('project', ['ui.router', 'ngMaterial'])
 .service('Config', function($q, $http, defaultConfig, username, password) {
-  var url = "https://raw.githubusercontent.com/l3zA/miner-manage/master/config.json";
+  var url = "https://raw.githubusercontent.com/ravex7/miner-manage/master/config.json";
   var poolId = 1;
+  var algoId = 1;
   var config = [];
 
   this.savePool = function (pool) {
       if (pool.id == null) {
-          //if this is new contact, add it in contacts array
           pool.id = poolId++;
           config.pools.push(pool);
       } else {
-          //for existing contact, find this contact using id
-          //and update it.
           for (i in config.pools) {
               if (config.pools[i].id == pool.id) {
                   config.pools[i] = pool;
               }
           }
       }
-      console.log('pools', config.pools);
   }
 
-  //simply search contacts list for given id
-  //and returns the contact object if found
+  this.saveAlgo = function (algo) {
+      if (algo.id == null) {
+          algo.id = algoId++;
+          config.algos.push(algo);
+      } else {
+          for (i in config.algos) {
+              if (config.algos[i].id == algo.id) {
+                  config.algos[i] = algo;
+              }
+          }
+      }
+  }
+
   this.getPool = function (id) {
     if(id){
       for (i in config.pools) {
@@ -34,13 +42,31 @@ angular.module('project', ['ui.router', 'ngMaterial'])
       return null;
     }
   }
-  
-  //iterate through contacts list and delete 
-  //contact if found
-  this.delete = function (id) {
+
+  this.getAlgo = function (id) {
+    if(id){
+      for (i in config.algos) {
+          if (config.algos[i].id == id) {
+              return config.algos[i];
+          }
+      }
+    }else{
+      return null;
+    }
+  }
+
+  this.deletePool = function (id) {
       for (i in config.pools) {
           if (config.pools[i].id == id) {
               config.pools.splice(i, 1);
+          }
+      }
+  }
+
+  this.deleteAlgo = function (id) {
+      for (i in config.algos) {
+          if (config.algos[i].id == id) {
+              config.algos.splice(i, 1);
           }
       }
   }

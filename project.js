@@ -1,8 +1,11 @@
 angular.module('project', ['ui.router', 'ngMaterial'])
 .service('Config', function($q, $http, defaultConfig, username, password) {
+  this.username = username;
+  this.password = password;
   var url = "https://raw.githubusercontent.com/ravex7/miner-manage/master/config.json";
   var poolId = 1;
   var algoId = 1;
+  var minerId = 1;
   var config = [];
 
   this.savePool = function (pool) {
@@ -26,6 +29,19 @@ angular.module('project', ['ui.router', 'ngMaterial'])
           for (i in config.algos) {
               if (config.algos[i].id == algo.id) {
                   config.algos[i] = algo;
+              }
+          }
+      }
+  }
+
+  this.saveMiner = function (miner) {
+      if (miner.id == null) {
+          miner.id = minerId++;
+          config.miners.push(miner);
+      } else {
+          for (i in config.miners) {
+              if (config.miners[i].id == miner.id) {
+                  config.miners[i] = miner;
               }
           }
       }
@@ -55,6 +71,18 @@ angular.module('project', ['ui.router', 'ngMaterial'])
     }
   }
 
+  this.getMiner = function (id) {
+    if(id){
+      for (i in config.miners) {
+          if (config.miners[i].id == id) {
+              return config.miners[i];
+          }
+      }
+    }else{
+      return null;
+    }
+  }
+
   this.deletePool = function (id) {
       for (i in config.pools) {
           if (config.pools[i].id == id) {
@@ -71,7 +99,15 @@ angular.module('project', ['ui.router', 'ngMaterial'])
       }
   }
 
-  this.getConfig = function(){
+  this.deleteMiner = function (id) {
+      for (i in config.miners) {
+          if (config.miners[i].id == id) {
+              config.miners.splice(i, 1);
+          }
+      }
+  }
+
+  this.getConfigVar = function(){
     return config;
   }
 
@@ -83,11 +119,15 @@ angular.module('project', ['ui.router', 'ngMaterial'])
     return config.algos;
   }
 
-  this.loadConfig = function () {
+  this.getMiners = function(){
+    return config.miners;
+  }
+
+  this.loadConfigFile = function () {
     var deferred = $q.defer();
 
-    var username = username
-    var password = password
+    var username = this.username
+    var password = this.password
     var reponame = "miner-manage"
     var gh = new Github({
       username: username,
@@ -163,15 +203,40 @@ angular.module('project', ['ui.router', 'ngMaterial'])
     }
   };
 
-  $scope.getPool = function(name){
+  $scope.getPool = function(id){
     $scope.pool = Config.getPool(name);
     $scope.poolDetail = true;
     $scope.poolsList = false;
   }
 
+  $scope.getAlgo = function(id){
+    $scope.algo = Config.getAlgo(name);
+    $scope.algoDetail = true;
+    $scope.algosList = false;
+  }
+
+  $scope.getMiner = function(id){
+    $scope.miner = Config.getMiner(name);
+    $scope.minerDetail = true;
+    $scope.minersList = false;
+  }
+
   $scope.cancelPool = function(){
     $scope.poolDetail = false;
     $scope.poolsList = true;
+    $scope.pool = null;
+  }
+
+  $scope.cancelAlgo = function(){
+    $scope.algoDetail = false;
+    $scope.algosList = true;
+    $scope.algo = null;
+  }
+
+  $scope.cancelMiner = function(){
+    $scope.minerDetail = false;
+    $scope.minersList = true;
+    $scope.miner = null;
   }
 
   $scope.savePool = function(){
@@ -179,10 +244,27 @@ angular.module('project', ['ui.router', 'ngMaterial'])
     $scope.getPools();
     $scope.poolDetail = false;
     $scope.poolsList = true;
+    $scope.pool = null;
   }
 
-  $scope.getConfig = function(){
-    $scope.config = Config.getConfig();
+  $scope.saveAlgo = function(){
+    Config.saveAlgo($scope.algo);
+    $scope.getAlgos();
+    $scope.algoDetail = false;
+    $scope.algosList = true;
+    $scope.algo = null;
+  }
+
+  $scope.saveMiner = function(){
+    Config.saveMiner($scope.miner);
+    $scope.getMiners();
+    $scope.minerDetail = false;
+    $scope.minersList = true;
+    $scope.miner = null;
+  }
+
+  $scope.getConfigVar = function(){
+    $scope.config = Config.getConfigVar();
   }
 
   $scope.getPools = function(){
@@ -193,15 +275,16 @@ angular.module('project', ['ui.router', 'ngMaterial'])
     $scope.algos = Config.getAlgos();
   }
 
-  $scope.getConfig = function(){
-    $scope.config = Config.getConfig();
+  $scope.getMiners = function(){
+    $scope.miners = Config.getMiners();
   }
 
-  Config.loadConfig() 
+  Config.loadConfigFile() 
    .then(function(data) {
       $scope.config = data;
       $scope.getPools();
       $scope.getAlgos();
+      $scope.getMiners();
    });
   
 });

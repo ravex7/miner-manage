@@ -1,8 +1,13 @@
 angular.module('project').value('defaultConfig', 
   {
-    "config" : {
+    "default" : {
       "minerName" : "miner"
     },
+    "configs" : [
+      {
+        "minerName" : "miner"
+      }
+    ],
     "pools" : [
       { 
         "id" : 1,

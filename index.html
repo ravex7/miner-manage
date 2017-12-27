@@ -64,11 +64,11 @@
               </md-toolbar>
               <md-content>
                 <md-list flex>
-                  <md-list-item class="md-2-line" ng-repeat="item in algos">
+                  <md-list-item class="md-2-line" ng-repeat="item in pools">
                     <div class="md-list-item-text" ng-click="getPool(item.id)">
                       <h3> Name : {{item.name}}</h3>
                       <p>URL : {{item.url}}</p>
-                      <p>No -a : {{item.a}}</p>
+                      <p>No -a : <span ng-if="item.a == '' || item.a == null || item.a == 'N'">No</span><span ng-if="item.a == 'Y'">Yes</span></p>
                       <md-button class="md-secondary" ng-click="getPool(item.id)">Edit</md-button>
                     </div>
                   </md-list-item>
@@ -155,9 +155,116 @@
               </md-content>
             </div>
           </div>
-        <div flex-gt-sm="100" flex ng-show="configView">
-          config
-        </div>
+          <div flex-gt-sm="100" flex ng-show="minersView">
+            <div ng-show="minersList">
+              <md-toolbar>
+                <div class="md-toolbar-tools">
+                  <md-button aria-label="miner">
+                    Miners
+                  </md-button>
+                  <span flex></span>
+                  <md-button class="md-raised" aria-label="New Miner" ng-click="getMiner()">
+                    New Miner
+                  </md-button>
+                </div>
+              </md-toolbar>
+              <md-content>
+                <md-list flex>
+                  <md-list-item class="md-2-line" ng-repeat="item in miners">
+                    <div class="md-list-item-text" ng-click="getMiner(item.id)">
+                      <h3> Name : {{item.name}}</h3>
+                      <p>Path : {{item.path}}</p>
+                      <md-button class="md-secondary" ng-click="getMiner(item.id)">Edit</md-button>
+                    </div>
+                  </md-list-item>
+                </md-list>
+              </md-content>
+            </div>
+            <div ng-show="minerDetail">
+              <md-content layout-padding>
+                <div>
+                  <form name="minerForm">
+                    <input type="hidden" ng-model="miner.id" />
+                    <div layout-gt-sm="row">
+                      <md-input-container class="md-block" flex-gt-sm>
+                        <label>Miner name</label>
+                        <input ng-model="miner.name">
+                      </md-input-container>
+                    </div>
+                    <div layout-gt-sm="row">
+                      <md-input-container class="md-block" flex-gt-sm>
+                        <label>Miner url dl</label>
+                        <input ng-model="miner.url">
+                      </md-input-container>
+                    </div>
+                    <div layout-gt-sm="row">
+                      <md-input-container class="md-block" flex-gt-sm>
+                        <label>Miner path</label>
+                        <input ng-model="miner.path">
+                      </md-input-container>
+                    </div>
+                    <md-button ng-click="saveMiner()" class="md-raised md-primary">Save Miner</md-button>
+                    <md-button ng-click="cancelMiner()" class="md-raised md-warn">Cancel</md-button>
+                  </form>
+                </div>
+              </md-content>
+            </div>
+          </div>
+          <div flex-gt-sm="100" flex ng-show="configsView">
+            <div ng-show="configsList">
+              <md-toolbar>
+                <div class="md-toolbar-tools">
+                  <md-button aria-label="config">
+                    Configs
+                  </md-button>
+                  <span flex></span>
+                  <md-button class="md-raised" aria-label="New Config" ng-click="getConfig()">
+                    New Config
+                  </md-button>
+                </div>
+              </md-toolbar>
+              <md-content>
+                <md-list flex>
+                  <md-list-item class="md-2-line" ng-repeat="item in configs">
+                    <div class="md-list-item-text" ng-click="getConfig(item.id)">
+                      <h3> Name : {{item.name}}</h3>
+                      <p>Path : {{item.path}}</p>
+                      <md-button class="md-secondary" ng-click="getConfig(item.id)">Edit</md-button>
+                    </div>
+                  </md-list-item>
+                </md-list>
+              </md-content>
+            </div>
+            <div ng-show="configDetail">
+              <md-content layout-padding>
+                <div>
+                  <form name="configForm">
+                    <input type="hidden" ng-model="config.id" />
+                    <div layout-gt-sm="row">
+                      <md-input-container class="md-block" flex-gt-sm>
+                        <label>Config name</label>
+                        <input ng-model="config.name">
+                      </md-input-container>
+                    </div>
+                    <div layout-gt-sm="row">
+                      <md-input-container class="md-block" flex-gt-sm>
+                        <label>Config url dl</label>
+                        <input ng-model="config.url">
+                      </md-input-container>
+                    </div>
+                    <div layout-gt-sm="row">
+                      <md-input-container class="md-block" flex-gt-sm>
+                        <label>Config path</label>
+                        <input ng-model="config.path">
+                      </md-input-container>
+                    </div>
+                    <md-button ng-click="saveConfig()" class="md-raised md-primary">Save Config</md-button>
+                    <md-button ng-click="cancelConfig()" class="md-raised md-warn">Cancel</md-button>
+                  </form>
+                </div>
+              </md-content>
+            </div>
+          </div>
       </md-content>
       </div>
      

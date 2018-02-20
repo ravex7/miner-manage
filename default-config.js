@@ -33,38 +33,91 @@ angular.module('project').value('defaultConfig',
     "algos" : [
       {
         "id" : 1,
-        "name" : "bitcore",
-        "port" : 3556
+        "name" : "bitcore"
       },
       {
         "id" : 2,
-        "name" : "phi",
-        "port" : 8333
+        "name" : "phi"
       },
       {
         "id" : 3,
-        "name" : "skunk",
-        "port" : 8433
+        "name" : "skunk"
       },
       {
         "id" : 4,
-        "name" : "xevan",
-        "port" : 3739
+        "name" : "xevan"
       },
       {
         "id" : 5,
-        "name" : "lyra2v2",
-        "port" : 4533
+        "name" : "lyra2v2"
       },
       {
         "id" : 6,
-        "name" : "neoscrypt",
-        "port" : 14233
+        "name" : "neoscrypt"
       },
       {
         "id" : 7,
-        "name" : "nist5",
+        "name" : "nist5"
+      },
+      {
+        "id" : 8,
+        "name" : "x11"
+      }
+    ],
+	"ports" : [
+      {
+		"id" : 1,
+        "port" : 3556
+      },
+      {
+		"id" : 2,
+        "port" : 8333
+      },
+      {
+		"id" : 3,
+        "port" : 8433
+      },
+      {
+		"id" : 4,
+        "port" : 3739
+      },
+      {
+		"id" : 5,
+        "port" : 4533
+      },
+      {
+		"id" : 6,
+        "port" : 14233
+      },
+      {
+		"id" : 7,
         "port" : 3833
+      }
+    ],
+	"addresses" : [
+      { 
+        "id" : 1,
+        "name" : "BTC",
+		"source" : "BX",
+        "address" : "3MJH6zFkwxhGYz2H8j59gYpCcnKAUjsJK7"
+      },
+      { 
+        "id" : 2,
+        "name" : "LUX",
+		"source" : "l3za",
+        "address" : "Lag3ink8cbBAJcmToS8jp3VCeqV8rZfENQ"
+      },
+      { 
+        "id" : 3,
+        "name" : "QBIC",
+		"source" : "l3za",
+        "address" : "GS5fmDa2Xqb59nBS4enwTRYpNMhCF1SyGM"
+      },
+      { 
+        "id" : 4,
+        "name" : "DIN",
+		"source" : "l3za",
+        "address" : "DQJ6Y5Ld2s3ovAEW9gHB5m1EW18AreCNF5"
       }
     ],
     "coins" : [
@@ -127,6 +180,12 @@ angular.module('project').value('defaultConfig',
         "algo" : 7,
         "name" : "BWK",
         "fullName" : "Bulwark"
+      },
+      {
+        "id" : 11,
+        "algo" : 8,
+        "name" : "BTC",
+        "fullName" : "Bitcoin"
       }
     ],
     "miners" : [
@@ -150,6 +209,9 @@ angular.module('project').value('defaultConfig',
         "name" : "ccminer-alexis78-ms2013-cuda7.5",
         "path" : "C:\\Users\\Miner\\Downloads\\ccminer-alexis78-ms2013-cuda7.5"
       }
+    ],
+	"runs" : [
+      
     ]
   }
 )

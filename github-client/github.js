@@ -577,10 +577,18 @@
                 return res.sha;
               }).promise();
             };
-            this.updateHead = function(head, commit) {
-              return _request('PATCH', "" + _repoPath + "/git/refs/heads/" + head, {
-                sha: commit
-              });
+            this.updateHead = function(head, commit, force) {
+				if(typeof force!='undefined'){
+					return _request('PATCH', "" + _repoPath + "/git/refs/heads/" + head, {
+					sha: commit,
+					force: force
+				  });
+				}else{
+					return _request('PATCH', "" + _repoPath + "/git/refs/heads/" + head, {
+					sha: commit
+				  });
+				}
+              
             };
             this.getCommit = function(sha) {
               return _request('GET', "" + _repoPath + "/commits/" + sha, null);
@@ -713,7 +721,7 @@
                 });
               }).promise();
             };
-            this.write = function(path, content, message, isBase64) {
+            this.write = function(path, content, message, isBase64, force) {
               var _this = this;
               if (message == null) {
                 message = "Changed " + path;
@@ -723,7 +731,7 @@
                   return _git.postBlob(content, isBase64).then(function(blob) {
                     return _git.updateTree(latestCommit, path, blob).then(function(tree) {
                       return _git.commit(latestCommit, tree, message).then(function(commitSha) {
-                        return _git.updateHead(branch, commitSha).then(function(res) {
+                        return _git.updateHead(branch, commitSha, force).then(function(res) {
                           return res.object;
                         });
                       });

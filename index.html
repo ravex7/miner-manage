@@ -10,6 +10,8 @@
     <script src="angular/angular-material.min.js">
     <script src="angular/angular-resource.js"></script>
     <script src="angular/angular-ui-router.js"></script>
+	
+	<script src="angular/ngClipboard.js"></script>
 
     <script src="jquery/jquery.min.js"></script>
     <script src="github-client/lib/base64.js"></script>
@@ -29,26 +31,84 @@
     <h2>JavaScript Projects</h2>
     
     <div ng-controller="ProjectListController">
-      <div flex="20"></div>
-      <div flex="50">
+      <div flex="100">
          <md-content class="md-padding">
+		 <md-button ng-click="saveConfig()" class="md-raised md-primary">Save Config</md-button>
            <md-nav-bar
             md-no-ink-bar="disableInkBar"
             md-selected-nav-item="currentNavItem"
             nav-bar-aria-label="navigation links">
+			<md-nav-item md-nav-click="goto('algos')" name="algos">
+              Algos
+            </md-nav-item>
             <md-nav-item md-nav-click="goto('pools')" name="pools">
               Pools
             </md-nav-item>
-            <md-nav-item md-nav-click="goto('algos')" name="algos">
-              Algos
+			<md-nav-item md-nav-click="goto('ports')" name="ports">
+              Ports
+            </md-nav-item>
+			<md-nav-item md-nav-click="goto('addresses')" name="addresses">
+              Addresses
+            </md-nav-item>
+			<md-nav-item md-nav-click="goto('coins')" name="coins">
+              Coins
             </md-nav-item>
             <md-nav-item md-nav-click="goto('miners')" name="miners">
               Miners
             </md-nav-item>
-            <md-nav-item md-nav-click="goto('config')" name="config">
-              Config
+            <md-nav-item md-nav-click="goto('runs')" name="run">
+              Runs
             </md-nav-item>
           </md-nav-bar>
+		  <div flex-gt-sm="100" flex ng-show="algosView">
+            <div ng-show="algosList">
+              <md-toolbar>
+                <div class="md-toolbar-tools">
+                  <md-button aria-label="algo">
+                    Algos
+                  </md-button>
+                  <span flex></span>
+                  <md-button class="md-raised" aria-label="New Algo" ng-click="getAlgo()">
+                    New Algo
+                  </md-button>
+                </div>
+              </md-toolbar>
+              <md-content>
+                <md-list flex>
+                  <md-list-item class="md-2-line" ng-repeat="item in algos">
+                    <div class="md-list-item-text" ng-click="getAlgo(item.id)">
+                      <h3> Name : {{item.name}}</h3>
+                      <md-button class="md-secondary" ng-click="getAlgo(item.id)">Edit</md-button>
+                    </div>
+                  </md-list-item>
+                </md-list>
+              </md-content>
+            </div>
+            <div ng-show="algoDetail">
+              <md-content layout-padding>
+                <div>
+                  <form name="algoForm">
+                    <input type="hidden" ng-model="algo.id" />
+                    <div layout-gt-sm="row">
+                      <md-input-container class="md-block" flex-gt-sm>
+                        <label>algo name</label>
+                        <input ng-model="algo.name">
+                      </md-input-container>
+                    </div>
+
+                    <div layout-gt-sm="row">
+                      <md-input-container class="md-block" flex-gt-sm>
+                        <label>algo port</label>
+                        <input ng-model="algo.url" type="number">
+                      </md-input-container>
+                    </div>
+                    <md-button ng-click="saveAlgo()" class="md-raised md-primary">Save Algo</md-button>
+                    <md-button ng-click="cancelAlgo()" class="md-raised md-warn">Cancel</md-button>
+                  </form>
+                </div>
+              </md-content>
+            </div>
+          </div>
            <div flex-gt-sm="100" flex ng-show="poolsView">
             <div ng-show="poolsList">
               <md-toolbar>
@@ -105,51 +165,134 @@
               </md-content>
             </div>
           </div>
-          <div flex-gt-sm="100" flex ng-show="algosView">
-            <div ng-show="algosList">
+		  <div flex-gt-sm="100" flex ng-show="portsView">
+            <div ng-show="portsList">
               <md-toolbar>
                 <div class="md-toolbar-tools">
-                  <md-button aria-label="algo">
-                    Algos
+                  <md-button aria-label="port">
+                    Ports
                   </md-button>
                   <span flex></span>
-                  <md-button class="md-raised" aria-label="New Algo" ng-click="getAlgo()">
-                    New Algo
+                  <md-button class="md-raised" aria-label="New Port" ng-click="getPort()">
+                    New Port
                   </md-button>
                 </div>
               </md-toolbar>
               <md-content>
                 <md-list flex>
-                  <md-list-item class="md-2-line" ng-repeat="item in algos">
-                    <div class="md-list-item-text" ng-click="getAlgo(item.id)">
-                      <h3> Name : {{item.name}}</h3>
-                      <p>URL : {{item.port}}</p>
-                      <md-button class="md-secondary" ng-click="getAlgo(item.id)">Edit</md-button>
+                  <md-list-item class="md-2-line" ng-repeat="item in ports">
+                    <div class="md-list-item-text" ng-click="getPort(item.id)">
+                      <p>Port : {{item.port}}</p>
+                      <md-button class="md-secondary" ng-click="getPort(item.id)">Edit</md-button>
                     </div>
                   </md-list-item>
                 </md-list>
               </md-content>
             </div>
-            <div ng-show="algoDetail">
+            <div ng-show="portDetail">
               <md-content layout-padding>
                 <div>
-                  <form name="algoForm">
-                    <input type="hidden" ng-model="algo.id" />
+                  <form name="portForm">
+                    <input type="hidden" ng-model="port.id" />
                     <div layout-gt-sm="row">
                       <md-input-container class="md-block" flex-gt-sm>
-                        <label>algo name</label>
-                        <input ng-model="algo.name">
+                        <label>port</label>
+                        <input ng-model="port.port" type="number">
                       </md-input-container>
                     </div>
-
+                    <md-button ng-click="savePort()" class="md-raised md-primary">Save Port</md-button>
+                    <md-button ng-click="cancelPort()" class="md-raised md-warn">Cancel</md-button>
+                  </form>
+                </div>
+              </md-content>
+            </div>
+          </div>
+		  <div flex-gt-sm="100" flex ng-show="addressesView">
+            <div ng-show="addressesList">
+              <md-toolbar>
+                <div class="md-toolbar-tools">
+                  <md-button aria-label="address">
+                    Addresses
+                  </md-button>
+                  <span flex></span>
+                  <md-button class="md-raised" aria-label="New Address" ng-click="getAddress()">
+                    New Address
+                  </md-button>
+                </div>
+              </md-toolbar>
+              <md-content>
+                <md-list flex>
+                  <md-list-item class="md-2-line" ng-repeat="item in addresses">
+                    <div class="md-list-item-text" ng-click="getAddress(item.id)">
+                      <p>Address : {{item.address}} ({{Config.getCoin(item.coinId).name}})</p>
+                      <md-button class="md-secondary" ng-click="getAddress(item.id)">Edit</md-button>
+                    </div>
+                  </md-list-item>
+                </md-list>
+              </md-content>
+            </div>
+            <div ng-show="addressDetail">
+              <md-content layout-padding>
+                <div>
+                  <form name="addressForm">
+                    <input type="hidden" ng-model="address.id" />
                     <div layout-gt-sm="row">
                       <md-input-container class="md-block" flex-gt-sm>
-                        <label>algo port</label>
-                        <input ng-model="algo.url" type="number">
+                        <label>address address</label>
+                        <input ng-model="address.url" type="number">
                       </md-input-container>
                     </div>
-                    <md-button ng-click="saveAlgo()" class="md-raised md-primary">Save Algo</md-button>
-                    <md-button ng-click="cancelAlgo()" class="md-raised md-warn">Cancel</md-button>
+                    <md-button ng-click="saveAddress()" class="md-raised md-primary">Save Address</md-button>
+                    <md-button ng-click="cancelAddress()" class="md-raised md-warn">Cancel</md-button>
+                  </form>
+                </div>
+              </md-content>
+            </div>
+          </div>
+		  <div flex-gt-sm="100" flex ng-show="coinsView">
+            <div ng-show="coinsList">
+              <md-toolbar>
+                <div class="md-toolbar-tools">
+                  <md-button aria-label="Coin">
+                    Coins
+                  </md-button>
+                  <span flex></span>
+                  <md-button class="md-raised" aria-label="New Coin" ng-click="getCoin()">
+                    New Coin
+                  </md-button>
+                </div>
+              </md-toolbar>
+              <md-content>
+                <md-list flex>
+                  <md-list-item class="md-2-line" ng-repeat="item in coins">
+                    <div class="md-list-item-text" ng-click="getCoin(item.id)">
+                      <h3> Name : {{item.name}}</h3>
+					  <h3> Full Name : {{item.fullName}}</h3>
+                      <md-button class="md-secondary" ng-click="getCoin(item.id)">Edit</md-button>
+                    </div>
+                  </md-list-item>
+                </md-list>
+              </md-content>
+            </div>
+            <div ng-show="coinDetail">
+              <md-content layout-padding>
+                <div>
+                  <form name="coinForm">
+                    <input type="hidden" ng-model="coin.id" />
+                    <div layout-gt-sm="row">
+                      <md-input-container class="md-block" flex-gt-sm>
+                        <label>Coin name</label>
+                        <input ng-model="coin.name">
+                      </md-input-container>
+                    </div>
+                    <div layout-gt-sm="row">
+                      <md-input-container class="md-block" flex-gt-sm>
+                        <label>Coin Full Name</label>
+                        <input ng-model="coin.fullName">
+                      </md-input-container>
+                    </div>
+                    <md-button ng-click="saveCoin()" class="md-raised md-primary">Save Coin</md-button>
+                    <md-button ng-click="cancelCoin()" class="md-raised md-warn">Cancel</md-button>
                   </form>
                 </div>
               </md-content>
@@ -210,56 +353,106 @@
               </md-content>
             </div>
           </div>
-          <div flex-gt-sm="100" flex ng-show="configsView">
-            <div ng-show="configsList">
+          <div flex-gt-sm="100" flex ng-show="runsView">
+            <div ng-show="runsList">
               <md-toolbar>
                 <div class="md-toolbar-tools">
-                  <md-button aria-label="config">
-                    Configs
+                  <md-button aria-label="run">
+                    Runs
                   </md-button>
                   <span flex></span>
-                  <md-button class="md-raised" aria-label="New Config" ng-click="getConfig()">
-                    New Config
+                  <md-button class="md-raised" aria-label="New Run" ng-click="getRun()">
+                    New Run
                   </md-button>
                 </div>
               </md-toolbar>
               <md-content>
                 <md-list flex>
-                  <md-list-item class="md-2-line" ng-repeat="item in configs">
-                    <div class="md-list-item-text" ng-click="getConfig(item.id)">
-                      <h3> Name : {{item.name}}</h3>
-                      <p>Path : {{item.path}}</p>
-                      <md-button class="md-secondary" ng-click="getConfig(item.id)">Edit</md-button>
+                  <md-list-item class="md-2-line" ng-repeat="item in runs">
+                    <div class="md-list-item-text">
+					<md-content flex layout-padding ng-copyable>
+					:loop
+					<br/>
+                    %USERPROFILE%\Downloads\{{Config.getMiner(item.minerId).path}} <span ng-if="Config.getPool(item.poolId).a!='N'">-a m7m<span> -o stratum+tcp://{{Config.getPool(item.poolId).url}}:{{Config.getPort(item.portId).port}} -u {{Config.getAddress(item.addressId).address}}.%COMPUTERNAME% -p c={{Config.getCoin(item.coinId).name}}
+                    <br/>
+					timeout /T 10
+					<br/>
+					goto loop
+					</md-content>
+					
+                      <md-button class="md-secondary" ng-click="getRun(item.id)">Edit</md-button>
                     </div>
                   </md-list-item>
                 </md-list>
               </md-content>
             </div>
-            <div ng-show="configDetail">
+            <div ng-show="runDetail">
               <md-content layout-padding>
                 <div>
-                  <form name="configForm">
-                    <input type="hidden" ng-model="config.id" />
-                    <div layout-gt-sm="row">
+                  <form name="runForm">
+                    <input type="hidden" ng-model="run.id" />
+					<div layout-gt-sm="row">
                       <md-input-container class="md-block" flex-gt-sm>
-                        <label>Config name</label>
-                        <input ng-model="config.name">
+                        <label>Algo</label>
+						<md-select ng-model="run.algoId">
+							<md-option ng-repeat="item in algos" ng-value="item.id">
+							{{item.name}}
+							</md-option>
+						</md-select>
                       </md-input-container>
                     </div>
-                    <div layout-gt-sm="row">
+					<div layout-gt-sm="row">
                       <md-input-container class="md-block" flex-gt-sm>
-                        <label>Config url dl</label>
-                        <input ng-model="config.url">
+                        <label>Pool</label>
+						<md-select ng-model="run.poolId">
+							<md-option ng-repeat="item in pools" ng-value="item.id">
+							{{item.name}}
+							</md-option>
+						</md-select>
                       </md-input-container>
                     </div>
-                    <div layout-gt-sm="row">
+					<div layout-gt-sm="row">
                       <md-input-container class="md-block" flex-gt-sm>
-                        <label>Config path</label>
-                        <input ng-model="config.path">
+                        <label>Port</label>
+						<md-select ng-model="run.portId">
+							<md-option ng-repeat="item in ports" ng-value="item.id">
+							{{item.port}}
+							</md-option>
+						</md-select>
                       </md-input-container>
                     </div>
-                    <md-button ng-click="saveConfig()" class="md-raised md-primary">Save Config</md-button>
-                    <md-button ng-click="cancelConfig()" class="md-raised md-warn">Cancel</md-button>
+					<div layout-gt-sm="row">
+                      <md-input-container class="md-block" flex-gt-sm>
+                        <label>Address</label>
+						<md-select ng-model="run.addressId">
+							<md-option ng-repeat="item in addresses" ng-value="item.id">
+							{{item.name}} {{address.address}}
+							</md-option>
+						</md-select>
+                      </md-input-container>
+                    </div>
+					<div layout-gt-sm="row">
+                      <md-input-container class="md-block" flex-gt-sm>
+                        <label>Coin</label>
+						<md-select ng-model="run.coinId">
+							<md-option ng-repeat="item in coins" ng-value="item.id">
+							{{item.name}}
+							</md-option>
+						</md-select>
+                      </md-input-container>
+                    </div>
+					<div layout-gt-sm="row">
+                      <md-input-container class="md-block" flex-gt-sm>
+                        <label>Miner</label>
+						<md-select ng-model="run.minerId">
+							<md-option ng-repeat="item in miners" ng-value="item.id">
+							{{item.name}}
+							</md-option>
+						</md-select>
+                      </md-input-container>
+                    </div>
+                    <md-button ng-click="saveRun()" class="md-raised md-primary">Save Run</md-button>
+                    <md-button ng-click="cancelRun()" class="md-raised md-warn">Cancel</md-button>
                   </form>
                 </div>
               </md-content>
